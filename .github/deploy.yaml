@@ -1,0 +1,38 @@
+# Name of the workflow to deploy KWS web app to Heroku cloud
+name: Build and deploy
+
+# Run workflow on every push to main branch
+  on:
+    push:
+      branches: [main]
+
+# Workflow jobs
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Check-out the repository
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build, Push and Release the KWS app as Docker container to Heroku.
+        uses: gonuit/heroku-docker-deploy@v1.3.3
+        with:
+          email: ${{ secrets.HEROKU_EMAIL }}
+
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+
+          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+
+          # Dockerfile directory
+          dockerfile_directory: ./
+
+          # Dockerfile name
+          dockerfile_name: Dockerfile
+
+          # Additional options of docker build command
+          docker_options: "--no-cache"
+
+          # (Optional, default: "web")
+          # By default, this argument is set to "web"
+          process_type: web
