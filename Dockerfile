@@ -1,4 +1,4 @@
-# Build base image
+
 FROM python:3.10-slim as python-base
 
 ENV PYTHONUNBUFFERED = 1 \
@@ -16,7 +16,6 @@ ENV PYTHONUNBUFFERED = 1 \
 ENV PATH = "$POETRY_HOME/bin:$VENV_PATH/bin:$PATH"
 
 
-# Build dev image
 FROM python-base as dev-base
 
 RUN : \
@@ -40,7 +39,6 @@ COPY poetry.lock pyproject.toml ./
 RUN poetry install
 
 
-#Build production image
 FROM python-base as production
 
 COPY --from=dev-base $PYSETUP_PATH $PYSETUP_PATH
